@@ -1,8 +1,23 @@
 const Joi=require('joi')
 const express=require ('express')
+const logger=require('./logger')
+const morgan = require('morgan')
 const app=express()
-
+//built-in middleware
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.use(express.static('public'))
+
+//custom middleware
+app.use(logger);
+
+app.use((req,res,next)=>{
+    console.log('Authenticating...')
+    next()
+})
+
+//3rd party middleware
+app.use(morgan('dev'))
 
 const courses=[
     {id:1,name:'course1'},
